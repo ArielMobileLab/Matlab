@@ -1,12 +1,20 @@
-
-clc;
 clear;
+clc;
 load('Tobi.mat', 'Tobidata')
 load('Amp.mat', 'Ampdata')
-load('Baseline.mat', 'Baselinedata')
  %------------------------------------------------------
-Participant_ID='A3_00201'; % Plugin the user ID.
+Participant_ID='test3'; % Plugin the user ID.
  %------------------------------------------------------
+
+Participant_ID=strtrim(Participant_ID);
+h = Ampdata(16,end);
+m = Ampdata(17,end);
+if(m<10)
+    m = "0" + m;
+end
+stemp = Ampdata(18,end);
+s = round(stemp,0);
+endtime ="(" + h + ";" + m + ";" + s + ")";
 
 headersTobi=[
     "measurement time"
@@ -36,50 +44,35 @@ headersTobi=[
     "Accelerometer_X"
     "Accelerometer_Y"
     "Accelerometer_Z"
+    "Time-H"
+    "Time-M"
+    "Time-S"
     ];
 headersAmp=[
-    "measurement time"
-    "simulation time"
-    "EEG_1"
-    "EEG_2"
-    "EEG_3"
-    "EEG_4"
-    "EEG_5"
-    "EEG_6"
-    "EEG_7"
-    "EEG_8"
-    "EEG_9"
-    "EEG_10"
-    "EEG_11"
-    "EEG_12"
-    "EEG_13"
-    "EEG_14"
-    "EEG_15"
-    "EEG_16"
+    "measurement time" %1
+    "simulation time"  %2
+    "GSR"              %3
+    "ECG"              %4
+    "EEG_1"            %5
+    "EEG_2"            %6
+    "EEG_3"            %7
+    "EEG_4"            %8
+    "EEG_5"            %9
+    "EEG_6"            %10
+    "EEG_7"            %11
+    "EEG_8"            %12
+    "EEG_9"            %13
+    "EEG_10"           %14
+    "EEG_11"           %15
+    "EEG_12"           %16
+    "Time-H"           %17
+    "Time-M"           %18
+    "Time-S"           %19
     ];
-headersBaseline=[
-    "measurement time"
-    "EEG_1"
-    "EEG_2"
-    "EEG_3"
-    "EEG_4"
-    "EEG_5"
-    "EEG_6"
-    "EEG_7"
-    "EEG_8"
-    "EEG_9"
-    "EEG_10"
-    "EEG_11"
-    "EEG_12"
-    "EEG_13"
-    "EEG_14"
-    "EEG_15"
-    "EEG_16"
-    ];
- 
-TOBI=[headersTobi';Tobidata'];
+
+
 AMP=[headersAmp';Ampdata'];
-BASE=[headersBaseline';Baselinedata'];
+TOBI=[headersTobi';Tobidata'];
 
 fprintf('Please use one of the following names for saving the data:\n');
 fprintf('--------------------------------------------------------\n');
@@ -95,9 +88,9 @@ fprintf('                 %s_LOAD 3 TTC 1\n',Participant_ID);
 fprintf('                 %s_LOAD 3 TTC 2\n',Participant_ID);
 fprintf('--------------------------------------------------------\n');
 fprintf('For Latency scenario:\n');
-fprintf('                 %s_segment1 delay 1\n',Participant_ID);
-fprintf('                 %s_segment2 delay 2\n',Participant_ID);
-fprintf('                 %s_segment3 delay 3\n',Participant_ID);
+fprintf('                 %s_LATENCY 1\n',Participant_ID);
+fprintf('                 %s_LATENCY 2\n',Participant_ID);
+fprintf('                 %s_LATENCY 3\n',Participant_ID);
 fprintf('--------------------------------------------------------\n');
 fprintf('For Spacial scenario:\n');
 fprintf('                 %s_ALLOCENTRIC\n',Participant_ID);
@@ -105,22 +98,21 @@ fprintf('                 %s EGOCENTRIC\n',Participant_ID);
 fprintf('--------------------------------------------------------\n');
 
 prompt = '<strong>Enter participant and scenario name (copy from above):</strong>';
-foldername = sprintf('%s at %s',input(prompt,'s'),datestr(now,'dd-mm(HH.MM.SS)'));
-
- direc = ['C:\Users\orenm\Desktop\CogantaDATA\Results\' foldername '\'];
- mkdir([ 'C:\Users\orenm\Desktop\CogantaDATA\Results\' foldername '\']);
+foldername = sprintf('%s at %s',input(prompt,'s'),endtime);
+foldername = strtrim(foldername);
+ direc = [ 'C:\Users\LAB-ORENMUZ\Desktop\CogantaDATA\Participants_DATA\' Participant_ID '\' foldername '\'];
+ mkdir([ 'C:\Users\LAB-ORENMUZ\Desktop\CogantaDATA\Participants_DATA\' Participant_ID '\' foldername '\']);
  
  filename1 = sprintf('Tobii Data of %s.xlsx',foldername);
  filename2 = sprintf('g.techAmp Data of %s.xlsx',foldername);
- filename3 = sprintf('Baseline Data of %s.xlsx',foldername);
  
  fullFileName1 = fullfile(direc,filename1);
  fullFileName2 = fullfile(direc,filename2);
- fullFileName3 = fullfile(direc,filename3);
 
  xlswrite(fullFileName1,TOBI)
  xlswrite(fullFileName2,AMP)
- xlswrite(fullFileName3,BASE)
  
- fprintf('<strong>DATA SAVED</strong>\n');
+ fprintf('<strong>DATA SAVED!</strong>\n');
+ 
+ 
 
