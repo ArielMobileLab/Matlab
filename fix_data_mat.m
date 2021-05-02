@@ -3,16 +3,16 @@ clc;
 load('Tobi.mat', 'Tobidata')
 load('Amp.mat', 'Ampdata')
  %------------------------------------------------------
-Participant_ID='test3 '; % Plugin the user ID.
+Participant_ID='try '; % Plugin the user ID.
  %------------------------------------------------------
 
 Participant_ID=strtrim(Participant_ID);
-h = Ampdata(16,end);
-m = Ampdata(17,end);
+h = Ampdata(17,end);
+m = Ampdata(18,end);
 if(m<10)
     m = "0" + m;
 end
-stemp = Ampdata(18,end);
+stemp = Ampdata(19,end);
 s = round(stemp,0);
 endtime ="(" + h + ";" + m + ";" + s + ")";
 
